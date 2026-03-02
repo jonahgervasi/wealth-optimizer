@@ -1,0 +1,123 @@
+import type { ClientIntake } from "@/types/client";
+
+export interface DemoPersona {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  intake: ClientIntake;
+}
+
+export const demoPersonas: DemoPersona[] = [
+  {
+    id: "maya",
+    name: "Maya Chen",
+    tagline: "First-time homebuyer, ON",
+    description: "28 · $85k salary · First-time buyer · Home purchase in 2 years",
+    intake: {
+      firstName: "Maya",
+      lastName: "Chen",
+      age: 28,
+      province: "ON",
+      isUSPerson: false,
+      hasSpouse: false,
+      numberOfChildren: 0,
+      annualIncome: 85000,
+      spouseIncome: 0,
+      marginalTaxRate: 0.4341, // ~43% combined federal+ON
+      taxRateOverride: false,
+      hasDBPension: false,
+      pensionAdjustment: 0,
+      tfsaRoom: 42000,
+      tfsaBalance: 15000,
+      rrspRoom: 12000,
+      rrspBalance: 8000,
+      fhsaRoom: 8000,
+      fhsaBalance: 0,
+      fhsaEligible: true,
+      respBalance: 0,
+      respEligible: false,
+      spousalRrspBalance: 0,
+      nonRegBalance: 5000,
+      primaryGoal: "home_purchase",
+      timeHorizonYears: 2,
+      monthlyContributionBudget: 1200,
+      riskTolerance: "moderate",
+      additionalNotes: "Planning to buy a condo in Toronto within 2 years. First-time buyer, never owned property.",
+    },
+  },
+  {
+    id: "david",
+    name: "David Park",
+    tagline: "Pre-retirement, BC — complex case",
+    description: "52 · $310k salary · DB pension · Spouse · Retirement planning",
+    intake: {
+      firstName: "David",
+      lastName: "Park",
+      age: 52,
+      province: "BC",
+      isUSPerson: false,
+      hasSpouse: true,
+      numberOfChildren: 2,
+      annualIncome: 310000,
+      spouseIncome: 65000,
+      marginalTaxRate: 0.535, // high bracket BC
+      taxRateOverride: false,
+      hasDBPension: true,
+      pensionAdjustment: 18500,
+      tfsaRoom: 28000,
+      tfsaBalance: 45000,
+      rrspRoom: 8500, // reduced by PA
+      rrspBalance: 180000,
+      fhsaRoom: 0,
+      fhsaBalance: 0,
+      fhsaEligible: false,
+      respBalance: 42000,
+      respEligible: false, // children over 18
+      spousalRrspBalance: 35000,
+      nonRegBalance: 250000,
+      primaryGoal: "retirement",
+      timeHorizonYears: 13,
+      monthlyContributionBudget: 5000,
+      riskTolerance: "moderate",
+      additionalNotes: "DB pension will provide ~$85k/yr at 65. Concerned about OAS clawback and estate planning. Spouse has lower income — income splitting opportunity.",
+    },
+  },
+  {
+    id: "sarah",
+    name: "Sarah Tremblay",
+    tagline: "US person in QC — edge case",
+    description: "38 · $120k salary · US citizen · FHSA eligible · Wealth building",
+    intake: {
+      firstName: "Sarah",
+      lastName: "Tremblay",
+      age: 38,
+      province: "QC",
+      isUSPerson: true,
+      hasSpouse: false,
+      numberOfChildren: 1,
+      annualIncome: 120000,
+      spouseIncome: 0,
+      marginalTaxRate: 0.5375, // QC high bracket
+      taxRateOverride: false,
+      hasDBPension: false,
+      pensionAdjustment: 0,
+      tfsaRoom: 55000,
+      tfsaBalance: 10000,
+      rrspRoom: 18000,
+      rrspBalance: 35000,
+      fhsaRoom: 8000,
+      fhsaBalance: 0,
+      fhsaEligible: true,
+      respBalance: 8000,
+      respEligible: true,
+      spousalRrspBalance: 0,
+      nonRegBalance: 20000,
+      primaryGoal: "wealth_building",
+      timeHorizonYears: 20,
+      monthlyContributionBudget: 2500,
+      riskTolerance: "aggressive",
+      additionalNotes: "US citizen living in Canada. PFIC rules apply for non-US mutual funds/ETFs. TFSA not recognized by IRS — requires FBAR/Form 8938 reporting. FHSA may have FATCA implications.",
+    },
+  },
+];

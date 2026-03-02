@@ -11,13 +11,18 @@ import type { AIAnalysisResult } from "@/types/analysis";
 import type { ReviewCase } from "@/types/review";
 
 const ANALYSIS_STEPS = [
-  { label: "Reading client profile", duration: 2000 },
-  { label: "Evaluating 2024 contribution room", duration: 3000 },
-  { label: "Calculating marginal tax impact", duration: 3500 },
-  { label: "Sequencing account priorities", duration: 3000 },
-  { label: "Checking routing rules", duration: 2000 },
-  { label: "Generating advisor brief", duration: 3000 },
-  { label: "Finalizing recommendations", duration: 2000 },
+  { label: "Reading client profile", duration: 1000 },
+  { label: "Identifying registered account eligibility", duration: 1500 },
+  { label: "Calculating TFSA contribution room", duration: 1500 },
+  { label: "Calculating RRSP contribution room", duration: 2000 },
+  { label: "Checking FHSA eligibility", duration: 1500 },
+  { label: "Running federal tax calculations", duration: 1500 },
+  { label: "Running provincial tax calculations", duration: 2000 },
+  { label: "Modelling contribution scenarios", duration: 2500 },
+  { label: "Sequencing account priorities", duration: 2000 },
+  { label: "Checking routing rules", duration: 1500 },
+  { label: "Generating advisor brief", duration: 2000 },
+  { label: "Finalizing recommendations", duration: 1500 },
 ];
 
 function AnalysisLoader({ name }: { name: string }) {

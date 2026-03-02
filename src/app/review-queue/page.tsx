@@ -11,7 +11,7 @@ export default function ReviewQueuePage() {
   const { reviewCases, markCaseReviewed } = useWealthStore();
   const [filter, setFilter] = useState<"all" | "pending" | "reviewed">("pending");
 
-  const handleMarkReviewed = (id: string) => {
+  const handleMarkReviewed = async (id: string) => {
     markCaseReviewed(id);
   };
 

@@ -25,11 +25,24 @@ const ANALYSIS_STEPS = [
   { label: "Finalizing recommendations", duration: 1500 },
 ];
 
+const WAITING_INSIGHTS = [
+  { heading: "TFSA", body: "Contribution room accumulates every year from age 18 — even years you don't contribute. Unused room carries forward indefinitely." },
+  { heading: "RRSP", body: "Every dollar contributed reduces your taxable income at your marginal rate. A $10,000 contribution could return $4,300+ for a high-income earner in Ontario." },
+  { heading: "FHSA", body: "The First Home Savings Account combines RRSP-style deductions with TFSA-style tax-free withdrawals — the best of both worlds for first-time buyers." },
+  { heading: "Asset location", body: "Bonds and REITs are most tax-efficient inside registered accounts. Canadian dividend stocks are often best held in non-registered accounts." },
+  { heading: "Pension adjustment", body: "DB pension members have their RRSP room reduced by a Pension Adjustment (PA) each year — Claude accounts for this in your contribution calculation." },
+  { heading: "RESP", body: "The government adds 20% CESG on the first $2,500 contributed per year per child — that's a guaranteed $500 annual return before any market growth." },
+  { heading: "Marginal vs. effective", body: "Your marginal rate applies only to the last dollar earned. Strategic RRSP contributions can push income below a bracket threshold, multiplying the tax benefit." },
+  { heading: "US persons", body: "CRA-registered accounts like the TFSA are not recognized by the IRS. US persons must report foreign accounts and may owe US tax on TFSA growth." },
+];
+
 function AnalysisLoader({ name }: { name: string }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [progress, setProgress] = useState(0);
   const [allStepsDone, setAllStepsDone] = useState(false);
+  const [tipIndex, setTipIndex] = useState(0);
+  const [tipVisible, setTipVisible] = useState(true);
 
   useEffect(() => {
     let step = 0;
@@ -71,6 +84,19 @@ function AnalysisLoader({ name }: { name: string }) {
     return () => clearInterval(interval);
   }, [allStepsDone]);
 
+  // Cycle through insights while waiting
+  useEffect(() => {
+    if (!allStepsDone) return;
+    const interval = setInterval(() => {
+      setTipVisible(false);
+      setTimeout(() => {
+        setTipIndex((i) => (i + 1) % WAITING_INSIGHTS.length);
+        setTipVisible(true);
+      }, 400);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [allStepsDone]);
+
   return (
     <PageContainer maxWidth="sm">
       <div className="flex flex-col items-center justify-center min-h-[70vh]">
@@ -94,19 +120,48 @@ function AnalysisLoader({ name }: { name: string }) {
           <div className="mb-6">
             <div className="flex justify-between text-xs text-slate-500 mb-2">
               <span>Progress</span>
-              <span>{progress}%</span>
+              <span>{allStepsDone ? "Finalizing…" : `${progress}%`}</span>
             </div>
             <div className="h-1.5 bg-navy-600 rounded-full overflow-hidden">
-              <div
-                className={`h-full bg-accent rounded-full transition-all ease-out ${
-                  allStepsDone ? "duration-[4000ms]" : "duration-700"
-                }`}
-                style={{ width: `${progress}%` }}
-              />
+              {allStepsDone ? (
+                <div className="h-full w-full bg-accent/40 rounded-full relative overflow-hidden">
+                  <div className="absolute inset-0 bg-accent rounded-full animate-pulse" style={{ width: "99%" }} />
+                </div>
+              ) : (
+                <div
+                  className="h-full bg-accent rounded-full transition-all duration-700 ease-out"
+                  style={{ width: `${progress}%` }}
+                />
+              )}
             </div>
           </div>
 
-          {/* Steps */}
+          {/* Steps list or waiting insights */}
+          {allStepsDone ? (
+            <div className="bg-navy-800 border border-accent/20 rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                <span className="text-xs text-accent font-medium uppercase tracking-wide">While you wait — did you know?</span>
+              </div>
+              <div
+                className="transition-opacity duration-400"
+                style={{ opacity: tipVisible ? 1 : 0 }}
+              >
+                <p className="text-sm font-semibold text-white mb-1">{WAITING_INSIGHTS[tipIndex].heading}</p>
+                <p className="text-sm text-slate-400 leading-relaxed">{WAITING_INSIGHTS[tipIndex].body}</p>
+              </div>
+              <div className="flex gap-1 mt-4 justify-center">
+                {WAITING_INSIGHTS.map((_, i) => (
+                  <div
+                    key={i}
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      i === tipIndex ? "w-4 bg-accent" : "w-1.5 bg-navy-500"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : (
           <div className="bg-navy-800 border border-navy-500 rounded-xl p-5 space-y-3">
             {ANALYSIS_STEPS.map((step, i) => {
               const isDone = completedSteps.includes(i);
@@ -152,6 +207,7 @@ function AnalysisLoader({ name }: { name: string }) {
               );
             })}
           </div>
+          )}
 
           <p className="text-center text-xs text-slate-600 mt-4">
             {allStepsDone
